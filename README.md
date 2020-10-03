@@ -1,2 +1,2 @@
 # SocialApp-Project
-Social application for space community.
+Social application developed for space community.
