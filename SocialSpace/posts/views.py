@@ -8,11 +8,14 @@ from . import models
 from . import forms
 # Create your views here.
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
 
-class PostList(SelectRelatedMixin,generic.ListView):
+
+class PostList(SelectRelatedMixin, generic.ListView):
     model = models.Post
-    select_related = ('user','group')
+    select_related = ('user', 'group')
+
 
 class UserPosts(generic.ListView):
     model = models.Post
@@ -26,22 +29,23 @@ class UserPosts(generic.ListView):
         else:
             return self.posts.all()
 
-    def get_context_data(self,**kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['post_user'] = self.post_user
         return context
 
-class PostDetail(SelectRelatedMixin,generic.DetailView):
+
+class PostDetail(SelectRelatedMixin, generic.DetailView):
     model = models.Post
-    select_related = ('user','group')
+    select_related = ('user', 'group')
 
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(user__username__iexact=self.kwargs.get('username'))
 
-class CreatePost(LoginRequiredMixin,SelectRelatedMixin,generic.CreateView):
 
-    fields = ('message','group')
+class CreatePost(LoginRequiredMixin, SelectRelatedMixin, generic.CreateView):
+    fields = ('message', 'group')
     model = models.Post
 
     def form_valid(self, form):
@@ -50,24 +54,16 @@ class CreatePost(LoginRequiredMixin,SelectRelatedMixin,generic.CreateView):
         self.object.save()
         return super().form_valid(form)
 
-class DeletePost(LoginRequiredMixin,SelectRelatedMixin,generic.DeleteView):
 
+class DeletePost(LoginRequiredMixin, SelectRelatedMixin, generic.DeleteView):
     model = models.Post
-    select_related = ('user','group')
+    select_related = ('user', 'group')
     success_url = reverse_lazy('posts:all')
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(user_id = self.request.user.id)
+        return queryset.filter(user_id=self.request.user.id)
 
-    def delete(self,*args,**kwargs):
-        messages.success(self.request,'Post Deleted')
-        return super().delete(*args,**kwargs)
-
-
-
-
-
-
-
-
+    def delete(self, *args, **kwargs):
+        messages.success(self.request, 'Post Deleted')
+        return super().delete(*args, **kwargs)
