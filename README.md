@@ -1,2 +1,2 @@
 # SocialApp-Project
-Social application for space community.
+Repo for Social application for space community.
