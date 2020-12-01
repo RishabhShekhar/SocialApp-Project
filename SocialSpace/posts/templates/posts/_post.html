@@ -12,7 +12,7 @@
         </time>
             </h5>
         <div class="media-footer">
-            {% if user.is_authenticated and post.user == user %}
+            {% if user.is_authenticated and post.user == user and not hide_delete %}
                 <a href="{% url 'posts:delete' pk=post.pk %}" title="delete" class="btn btn-simple">
                     <span aria-hidden="true"><i class="fas fa-trash-alt"></i></span>
                     <span class="text-danger icon-label">Delete</span>
